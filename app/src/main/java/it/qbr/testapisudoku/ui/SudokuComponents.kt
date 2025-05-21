@@ -1,9 +1,12 @@
 package it.qbr.testapisudoku.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,14 +16,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.AlertDialogDefaults.containerColor
+import androidx.compose.material3.AlertDialogDefaults.shape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,7 +44,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import it.qbr.testapisudoku.R
+import it.qbr.testapisudoku.ui.theme.gray
 import it.qbr.testapisudoku.ui.theme.gray_light
+import it.qbr.testapisudoku.ui.theme.light_error
 import it.qbr.testapisudoku.ui.theme.light_primary
 import it.qbr.testapisudoku.ui.theme.light_secondary
 import it.qbr.testapisudoku.ui.theme.white
@@ -72,7 +84,7 @@ fun SudokuCell(value: Int) {
 @Preview(showBackground = true)
 @Composable
 fun SudokuPreview() {
-    SudokuTopBar(45, 2)
+    SudokuBottomBar()
 }
 
 
@@ -87,21 +99,25 @@ fun SudokuTopBar(seconds: Int, errorCount: Int) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
+        Row {
+            Image(
             painter = painterResource(id = R.drawable.ic_timer_icon),
             contentDescription = "Icona timer"
         )
-        Text(
-            text = "%02d:%02d".format(minutes, secs),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
-        )
+            Spacer(modifier = Modifier.width(2.dp)) // Spazio tra icona e testo
+            Text(
+                text = "%02d:%02d".format(minutes, secs),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+        }
+
         Text(
             text = "Errori: $errorCount",
             fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Red
+            //fontWeight = FontWeight.Bold,
+            color = Color.Black
         )
     }
 }
@@ -119,14 +135,14 @@ fun SudokuBoard(
     Box(
         modifier = Modifier
             .padding(top = 80.dp, start = 12.dp, end = 12.dp, bottom = 12.dp)
-            .shadow(10.dp)
+            //.shadow(10.dp)
             .clip(RoundedCornerShape(16.dp))
-            .border(1.dp, Color.Black, RoundedCornerShape(16.dp))
+            .border(2.dp, Color.Black, RoundedCornerShape(16.dp))
             .background(Color.White),
     ) {
         Column(
             Modifier
-                .padding(10.dp)
+                .padding(1.dp)
         ) {
             for ((rowIdx, row) in grid.withIndex()) {
                 Row {
@@ -175,13 +191,20 @@ fun SudokuCell(
     borderBottom: Dp = 1.dp,
     isHighlighted: Boolean
 ) {
-    val backgroundColor = when {
-        isError -> Color.Red.copy(alpha = 0.2f)
-        isSelected -> Color.Gray.copy(alpha = 0.5f)
-        isHighlighted -> gray_light
-        else -> Color(0xFFF8FAFF)
+
+    val shapeBackgroundColor = when {
+        isError -> light_error
+        isSelected -> light_secondary
+        // isHighlighted -> light_secondary
+        else -> light_primary
     }
-    val borderColor = Color.Gray
+
+    val backgroundColor = when{
+        // isSelected -> gray
+        else -> white
+    }
+
+    val borderColor = Color.Black
     val textColor = Color.Black
 
     Box(
@@ -190,26 +213,29 @@ fun SudokuCell(
             .size(40.dp)
             //.padding(0.5.dp)
             .background(backgroundColor, RoundedCornerShape(6.dp))
-            .border(2.dp, borderColor, RectangleShape)
+            .border(1.dp, borderColor, RectangleShape)
             .clickable(enabled = !isFixed, onClick = onClick)
     ) {
-        if (value != 0) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(32.dp)
-                    .align(Alignment.Center) // centra il cerchio nel Box genitore
-                    .background(light_primary, shape = CircleShape)
-            ){
-                Text(
-                    text = value.toString(),
-                    style = MaterialTheme.typography.labelSmall,
-                    fontSize = 15.sp,
-                    // fontWeight = FontWeight.Bold,
-                    color = white
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(32.dp)
+                .align(Alignment.Center) // centra il cerchio nel Box genitore
+                .background(
+                    color = if (value != 0) shapeBackgroundColor else Color.White,
+                    shape = CircleShape
                 )
-            }
+        ){
+            Text(
+                text = value.toString(),
+                style = MaterialTheme.typography.labelSmall,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Light,
+                // fontWeight = FontWeight.Bold,
+                color = white
+            )
         }
+
     }
 }
 
@@ -219,7 +245,7 @@ fun SudokuKeypad(onNumberSelected: (Int) -> Unit) {
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp, bottom = 60.dp),
+            .padding(top = 10.dp, bottom = 120.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Prima fila: 1-5
@@ -230,10 +256,10 @@ fun SudokuKeypad(onNumberSelected: (Int) -> Unit) {
             for (number in 1..5) {
                 Box(
                     modifier = Modifier
-                        .padding(10.dp)
-                        .size(55.dp)
+                        .padding(5.dp)
+                        .size(60.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .border(2.dp, light_primary, RoundedCornerShape(16.dp))
+                        .border(1.dp, light_primary, RoundedCornerShape(16.dp))
                         .background(white)
                         .clickable { onNumberSelected(number) },
                     contentAlignment = Alignment.Center
@@ -248,7 +274,7 @@ fun SudokuKeypad(onNumberSelected: (Int) -> Unit) {
                 }
             }
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(5.dp))
         // Seconda fila: 6-9
         Row(
             Modifier.fillMaxWidth(),
@@ -257,12 +283,11 @@ fun SudokuKeypad(onNumberSelected: (Int) -> Unit) {
             for (number in 6..9) {
                 Box(
                     modifier = Modifier
-                        .padding(10.dp)
-                        .size(55.dp)
+                        .padding(5.dp)
+                        .size(60.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .border(2.dp, light_primary, RoundedCornerShape(16.dp))
+                        .border(1.dp, light_primary, RoundedCornerShape(16.dp))
                         .background(white)
-                        .border(2.dp, Color.Black, RectangleShape)
                         .clickable { onNumberSelected(number) },
                     contentAlignment = Alignment.Center
                 ) {
@@ -300,4 +325,106 @@ fun SudokuKeypad(onNumberSelected: (Int) -> Unit) {
 
     }
 }
+
+
+@Composable
+fun SudokuBottomBar() {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Button(
+            onClick = {
+                // logica
+            },
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier
+                .weight(1f)
+            .border(2.dp, Color.Black, RoundedCornerShape(16.dp)),
+
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (isPressed) light_secondary else Color.White
+            ),
+            interactionSource = interactionSource,
+            contentPadding = ButtonDefaults.ContentPadding
+        ) {
+            Icon(
+                imageVector = Icons.Default.Home,
+                contentDescription = "Home",
+                modifier = Modifier.size(20.dp),
+                tint = Color.Black
+            )
+        }
+
+        Button(
+            onClick = { /* Azione */ },
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier
+                .weight(1f)
+                .border(2.dp, Color.Black, RoundedCornerShape(16.dp)),
+
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (isPressed) light_secondary else Color.White
+            ),
+            interactionSource = interactionSource,
+            contentPadding = ButtonDefaults.ContentPadding
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_delete),
+                contentDescription = "cancella",
+                modifier = Modifier.size(24.dp),
+                tint = Color.Black
+            )
+        }
+
+        Button(
+            onClick = { /* Azione */ },
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier
+                .weight(1f)
+                .border(2.dp, Color.Black, RoundedCornerShape(16.dp)),
+
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (isPressed) light_secondary else Color.White
+            ),
+            interactionSource = interactionSource,
+            contentPadding = ButtonDefaults.ContentPadding
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_light),
+                contentDescription = "suggerimento",
+                modifier = Modifier.size(24.dp),
+                tint = Color.Black
+            )
+        }
+
+        Button(
+            onClick = { /* Azione */ },
+            shape = RoundedCornerShape(16.dp),
+            modifier = Modifier
+                .weight(1f)
+                .border(2.dp, Color.Black, RoundedCornerShape(16.dp)),
+
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (isPressed) light_secondary else Color.White
+            ),
+            interactionSource = interactionSource,
+            contentPadding = ButtonDefaults.ContentPadding
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_history),
+                contentDescription = "cronologia",
+                modifier = Modifier.size(24.dp),
+                tint = Color.Black
+            )
+        }
+    }
+}
+
+
 

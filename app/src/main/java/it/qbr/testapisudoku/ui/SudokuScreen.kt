@@ -67,8 +67,8 @@ fun SudokuScreen() {
     var solution by remember { mutableStateOf<List<List<Int>>>(emptyList()) }
     var errorCell by remember { mutableStateOf<Pair<Int, Int>?>(null) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    var seconds by remember { mutableStateOf(0) }
-    var errorCount by remember { mutableStateOf(0) }
+    var seconds by remember { mutableIntStateOf(0) }
+    var errorCount by remember { mutableIntStateOf(0) }
     LaunchedEffect(Unit) {
         val (initialBoard, solutionBoard) = withContext(Dispatchers.IO) {
             SudokuApi.generateOnlineBoard()
@@ -147,6 +147,14 @@ fun SudokuScreen() {
             }
             Box(
                 Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+            ){
+                SudokuBottomBar()
+            }
+            /*
+            Box(
+                Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
             ) {
@@ -161,6 +169,8 @@ fun SudokuScreen() {
                     Text("Suggerisci Mossa")
                 }
             }
+
+             */
         }
     }
 }
