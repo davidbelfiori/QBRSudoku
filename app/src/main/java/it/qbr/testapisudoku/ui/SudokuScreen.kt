@@ -31,6 +31,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -108,6 +109,74 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
         label = "BlurAnimation"
     )
 
+    val scope = rememberCoroutineScope()
+    var completedCells by remember { mutableStateOf<Set<Pair<Int, Int>>>(emptySet()) }
+
+
+    // Funzione per controllare se una riga, colonna o blocco è completa
+    fun checkCompleteness(cells: List<List<Int>>) {
+        // Verifica che la griglia sia inizializzata e abbia le dimensioni corrette
+        if (cells.isEmpty() || cells.size != 9 || cells[0].size != 9) {
+            return  // Esce dalla funzione se la griglia non è valida
+        }
+
+        val newCompletedCells = mutableSetOf<Pair<Int, Int>>()
+
+        // Controlla righe
+        for (row in 0..8) {
+            val rowNumbers = cells[row].toSet()
+            if (rowNumbers.size == 9 && !rowNumbers.contains(0)) {
+                for (col in 0..8) {
+                    newCompletedCells.add(row to col)
+                }
+            }
+        }
+
+        // Controlla colonne
+        for (col in 0..8) {
+            val colNumbers = (0..8).map { cells[it][col] }.toSet()
+            if (colNumbers.size == 9 && !colNumbers.contains(0)) {
+                for (row in 0..8) {
+                    newCompletedCells.add(row to col)
+                }
+            }
+        }
+
+        // Controlla blocchi 3x3
+        for (blockRow in 0..2) {
+            for (blockCol in 0..2) {
+                val blockNumbers = mutableSetOf<Int>()
+                for (i in 0..2) {
+                    for (j in 0..2) {
+                        blockNumbers.add(cells[blockRow * 3 + i][blockCol * 3 + j])
+                    }
+                }
+                if (blockNumbers.size == 9 && !blockNumbers.contains(0)) {
+                    for (i in 0..2) {
+                        for (j in 0..2) {
+                            newCompletedCells.add((blockRow * 3 + i) to (blockCol * 3 + j))
+                        }
+                    }
+                }
+            }
+        }
+
+        // Aggiorna le celle completate
+        completedCells = newCompletedCells
+
+        // Rimuovi l'evidenziazione dopo un certo tempo
+        if (newCompletedCells.isNotEmpty()) {
+            scope.launch {
+                delay(1000) // Durata dell'animazione
+                completedCells = emptySet()
+            }
+        }
+    }
+
+    // Chiama checkCompleteness ogni volta che le celle vengono aggiornate
+    LaunchedEffect(cells) {
+        checkCompleteness(cells)
+    }
 
     LaunchedEffect(cells) {
         completedNumbers.clear()
@@ -301,6 +370,7 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
                             fixedCells = fixedCells,
                             selectedCell = selectedCell,
                             errorCells = errorCells,
+                            completedCells = completedCells,
                             selectedNumber = selectedNumber,
                             onCellSelected = { row, col ->
                                 selectedCell = row to col
