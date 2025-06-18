@@ -3,6 +3,9 @@ package it.qbr.testapisudoku.ui
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -232,6 +235,7 @@ fun SudokuBoard(
     fixedCells: List<List<Boolean>>,
     selectedCell: Pair<Int, Int>?,
     errorCells: Set<Pair<Int, Int>>,
+    completedCells: Set<Pair<Int, Int>>,
     selectedNumber: Int?,
     onSuggestMove: () -> Unit,
     onCellSelected: (Int, Int) -> Unit,
@@ -274,6 +278,7 @@ fun SudokuBoard(
                             isSelected = selectedCell == Pair(rowIdx, colIdx),
                             isFixed = fixedCells.getOrNull(rowIdx)?.getOrNull(colIdx) ?: false,
                             isError = errorCells.contains(Pair(rowIdx, colIdx)),
+                            isCompleted = completedCells.contains(Pair(rowIdx, colIdx)),
                             isHighlighted = isHighlighted && selectedCell != Pair(rowIdx, colIdx),
                             isSameNumber = selectedNumber != null && cell == selectedNumber && cell != 0,
                             onClick = {
@@ -302,6 +307,7 @@ fun SudokuCell(
     isSelected: Boolean,
     isFixed: Boolean,
     isError: Boolean,
+    isCompleted: Boolean,
     onClick: () -> Unit,
     borderTop: Dp = 0.dp,
     borderLeft: Dp = 0.dp,
@@ -314,12 +320,26 @@ fun SudokuCell(
     cellSize: Dp,
     isDarkTheme: Boolean
 ) {
+    // Colore per le celle completate
+    val completedColor = Color(0xFF2196F3).copy(alpha = 0.3f)
+
     val backgroundColor = when {
+        isCompleted -> completedColor // Priorità all'evidenziazione del completamento
         isHighlighted -> if(isDarkTheme) gray_2 else background_rows
         isSelected -> if(isDarkTheme) Color.DarkGray else background_cell
         isSameNumber -> if (isDarkTheme) Color.DarkGray else background_same_number
         else -> if (isDarkTheme) Color.Black else Color.White
     }
+
+    // Animazione del colore di sfondo
+    val animatedBackgroundColor by animateColorAsState(
+        targetValue = backgroundColor,
+        animationSpec = tween(
+            durationMillis = 500, // Durata dell'animazione
+            easing = FastOutSlowInEasing // Tipo di easing per una transizione più fluida
+        ),
+        label = "backgroundColor"
+    )
 
     val numberColor = when {
         isError -> Color.Red
@@ -327,11 +347,12 @@ fun SudokuCell(
         else -> blue_number
     }
 
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .size(cellSize)
-            .background(backgroundColor)
+            .background(animatedBackgroundColor)
             .drawBehind {
                 // Bordo superiore
                 drawLine(
@@ -364,6 +385,8 @@ fun SudokuCell(
             }
             .clickable { onClick() }
     ) {
+
+        // TODO: note non implementate
         if (value != 0) {
             Box(
                 contentAlignment = Alignment.Center,

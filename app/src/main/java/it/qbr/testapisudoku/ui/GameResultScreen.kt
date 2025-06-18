@@ -102,6 +102,7 @@ fun GameResultScreen(
                 fixedCells = fixedCells,
                 selectedCell = null,
                 errorCells = emptySet(),
+                completedCells = emptySet(),
                 selectedNumber = null,
                 onSuggestMove = {},
                 onCellSelected = { _, _ -> },
