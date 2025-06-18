@@ -109,23 +109,27 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
         label = "BlurAnimation"
     )
 
-    val scope = rememberCoroutineScope()
+    var completedRows by remember { mutableStateOf(setOf<Int>()) }
+    var completedColumns by remember { mutableStateOf(setOf<Int>()) }
+    var completedBlocks by remember { mutableStateOf(setOf<Int>()) }
     var completedCells by remember { mutableStateOf<Set<Pair<Int, Int>>>(emptySet()) }
+    val scope = rememberCoroutineScope()
 
-
-    // Funzione per controllare se una riga, colonna o blocco è completa
     fun checkCompleteness(cells: List<List<Int>>) {
-        // Verifica che la griglia sia inizializzata e abbia le dimensioni corrette
         if (cells.isEmpty() || cells.size != 9 || cells[0].size != 9) {
-            return  // Esce dalla funzione se la griglia non è valida
+            return
         }
 
         val newCompletedCells = mutableSetOf<Pair<Int, Int>>()
+        var shouldAnimate = false
 
         // Controlla righe
         for (row in 0..8) {
             val rowNumbers = cells[row].toSet()
-            if (rowNumbers.size == 9 && !rowNumbers.contains(0)) {
+            if (rowNumbers.size == 9 && !rowNumbers.contains(0) && !completedRows.contains(row)) {
+                // Aggiorna il set in modo immutabile
+                completedRows = completedRows + row
+                shouldAnimate = true
                 for (col in 0..8) {
                     newCompletedCells.add(row to col)
                 }
@@ -135,7 +139,10 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
         // Controlla colonne
         for (col in 0..8) {
             val colNumbers = (0..8).map { cells[it][col] }.toSet()
-            if (colNumbers.size == 9 && !colNumbers.contains(0)) {
+            if (colNumbers.size == 9 && !colNumbers.contains(0) && !completedColumns.contains(col)) {
+                // Aggiorna il set in modo immutabile
+                completedColumns = completedColumns + col
+                shouldAnimate = true
                 for (row in 0..8) {
                     newCompletedCells.add(row to col)
                 }
@@ -145,46 +152,62 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
         // Controlla blocchi 3x3
         for (blockRow in 0..2) {
             for (blockCol in 0..2) {
-                val blockNumbers = mutableSetOf<Int>()
-                for (i in 0..2) {
-                    for (j in 0..2) {
-                        blockNumbers.add(cells[blockRow * 3 + i][blockCol * 3 + j])
-                    }
-                }
-                if (blockNumbers.size == 9 && !blockNumbers.contains(0)) {
+                val blockIndex = blockRow * 3 + blockCol
+                if (!completedBlocks.contains(blockIndex)) {
+                    val blockNumbers = mutableSetOf<Int>()
                     for (i in 0..2) {
                         for (j in 0..2) {
-                            newCompletedCells.add((blockRow * 3 + i) to (blockCol * 3 + j))
+                            blockNumbers.add(cells[blockRow * 3 + i][blockCol * 3 + j])
+                        }
+                    }
+                    if (blockNumbers.size == 9 && !blockNumbers.contains(0)) {
+                        // Aggiorna il set in modo immutabile
+                        completedBlocks = completedBlocks + blockIndex
+                        shouldAnimate = true
+                        for (i in 0..2) {
+                            for (j in 0..2) {
+                                newCompletedCells.add((blockRow * 3 + i) to (blockCol * 3 + j))
+                            }
                         }
                     }
                 }
             }
         }
 
-        // Aggiorna le celle completate
-        completedCells = newCompletedCells
+        // Aggiorna le celle completate e avvia l'animazione solo se ci sono nuove sezioni completate
+        if (shouldAnimate && newCompletedCells.isNotEmpty()) {
+            completedCells = newCompletedCells
 
-        // Rimuovi l'evidenziazione dopo un certo tempo
-        if (newCompletedCells.isNotEmpty()) {
             scope.launch {
-                delay(1000) // Durata dell'animazione
+                delay(800)
                 completedCells = emptySet()
             }
         }
     }
 
-    // Chiama checkCompleteness ogni volta che le celle vengono aggiornate
+    // Reset dei set di completamento quando si genera una nuova partita
+    LaunchedEffect(Unit) {
+        val (initialBoard, solutionBoard) = withContext(Dispatchers.IO) {
+            SudokuApi.generateOnlineBoard()
+        }
+        board = initialBoard
+        cells = initialBoard.cells.map { it.toMutableList() }
+        fixedCells = initialBoard.cells.map { row -> row.map { it != 0 } }
+        solution = solutionBoard.cells
+        loading = false
+
+        // Reset dei set di completamento
+        completedRows = emptySet()
+        completedColumns = emptySet()
+        completedBlocks = emptySet()
+        completedCells = emptySet()
+    }
+
+    // Aggiungi un LaunchedEffect per controllare il completamento quando cells cambia
     LaunchedEffect(cells) {
         checkCompleteness(cells)
     }
 
-    LaunchedEffect(cells) {
-        completedNumbers.clear()
-        for (n in 1..9) {
-            val count = cells.sumOf { row -> row.count { it == n } }
-            if (count == 9) completedNumbers.add(n)
-        }
-    }
 
     if (step == 0) {
         Scaffold (containerColor = if (isDarkTheme) Color(34, 40, 49) else Color(0xFFE7EBF0)){

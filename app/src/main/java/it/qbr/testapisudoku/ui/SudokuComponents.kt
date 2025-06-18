@@ -320,8 +320,8 @@ fun SudokuCell(
     cellSize: Dp,
     isDarkTheme: Boolean
 ) {
-    // Definiamo il colore per le celle completate
-    val completedColor = Color(0xFF4CAF50).copy(alpha = 0.3f) // Verde con trasparenza
+    // Colore per le celle completate
+    val completedColor = Color(0xFF2196F3).copy(alpha = 0.3f)
 
     val backgroundColor = when {
         isCompleted -> completedColor // Priorità all'evidenziazione del completamento
