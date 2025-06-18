@@ -87,5 +87,8 @@ fun MainNavHost(
                 games = games
             )
         }
+        composable("results"){
+
+        }
     }
 }

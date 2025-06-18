@@ -47,7 +47,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -276,7 +275,7 @@ fun SudokuBoard(
                         SudokuCell(
                             value = cell,
                             isSelected = selectedCell == Pair(rowIdx, colIdx),
-                            isFixed = fixedCells.getOrNull(rowIdx)?.getOrNull(colIdx) ?: false,
+                            isFixed = fixedCells.getOrNull(rowIdx)?.getOrNull(colIdx) == true,
                             isError = errorCells.contains(Pair(rowIdx, colIdx)),
                             isCompleted = completedCells.contains(Pair(rowIdx, colIdx)),
                             isHighlighted = isHighlighted && selectedCell != Pair(rowIdx, colIdx),
@@ -531,7 +530,6 @@ fun SudokuIconBar(
     modifier: Modifier = Modifier,
     isDarkTheme: Boolean
 ) {
-    val context = LocalContext.current
 
     Box(
         modifier
