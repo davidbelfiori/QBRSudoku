@@ -222,6 +222,7 @@ fun StoricoPartiteScreen(navController: NavHostController, isDarkTheme: Boolean)
                                     Modifier.fillMaxWidth(),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
+                                    // Icona vinto/perso
                                     Icon(
                                         painter = painterResource(
                                             id = if (partita.vinta) R.drawable.ic_win else R.drawable.ic_lose
@@ -230,6 +231,8 @@ fun StoricoPartiteScreen(navController: NavHostController, isDarkTheme: Boolean)
                                         tint = if (partita.vinta) Color(0xFF2E7D32) else Color(0xFFC62828),
                                         modifier = Modifier.size(32.dp)
                                     )
+
+                                    // Data
                                     Column(
                                         verticalArrangement = Arrangement.Center,
                                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -239,10 +242,13 @@ fun StoricoPartiteScreen(navController: NavHostController, isDarkTheme: Boolean)
                                         Text(
                                             SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(partita.dataOra)),
                                             style = MaterialTheme.typography.bodyMedium,
+                                            maxLines = 1,
                                             overflow = TextOverflow.Ellipsis,
                                             color =  Color.Black
                                         )
                                     }
+
+                                    // Tempo
                                     Column(
                                         verticalArrangement = Arrangement.Center,
                                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -257,6 +263,8 @@ fun StoricoPartiteScreen(navController: NavHostController, isDarkTheme: Boolean)
                                             color =   Color.Black
                                         )
                                     }
+
+                                    // Difficoltà
                                     Column(
                                         verticalArrangement = Arrangement.Center,
                                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -271,6 +279,8 @@ fun StoricoPartiteScreen(navController: NavHostController, isDarkTheme: Boolean)
                                             color =   Color.Black
                                         )
                                     }
+
+                                    // Errori
                                     Column(
                                         verticalArrangement = Arrangement.Center,
                                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -313,7 +323,7 @@ fun StoricoPartiteScreen(navController: NavHostController, isDarkTheme: Boolean)
     }
 }
 
-
+// Sezione dei filtri
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun <T> FiltroTab(
@@ -328,6 +338,7 @@ fun <T> FiltroTab(
 ) where T : Enum<T> {
     val tabHeight = 36.dp
     val arrowWidth = if (showArrows) tabHeight else 0.dp
+
     BoxWithConstraints(
         modifier = modifier
             .fillMaxWidth()
@@ -356,6 +367,7 @@ fun <T> FiltroTab(
                         shape = RoundedCornerShape(50)
                     ),
             )
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -418,13 +430,14 @@ fun <T> FiltroTab(
 }
 
 
+// Sezione della tabella finale
 @Composable
 fun SudokuBoardPreview(boardJson: String) {
     val board: List<List<Int>> = remember(boardJson) {
         try {
             val type = object : TypeToken<List<List<Int>>>() {}.type
             Gson().fromJson(boardJson, type)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             List(9) { List(9) { 0 } }
         }
     }

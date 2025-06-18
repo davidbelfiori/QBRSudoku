@@ -57,10 +57,11 @@ fun HomeScreen(
         Scaffold(
             contentWindowInsets = WindowInsets(0),
             topBar = {
+
+                // Icona modalità scura/chiara
                 IconButton(
                     onClick = onToggleDarkTheme,
                     modifier = Modifier.size(50.dp).statusBarsPadding()
-
                 ) {
                     Icon(
                         painter = painterResource(
@@ -71,6 +72,7 @@ fun HomeScreen(
                     )
                 }
             },
+
             bottomBar = {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -93,7 +95,7 @@ fun HomeScreen(
                         onClick = onStats,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                         modifier = Modifier
-                            .size(150.dp, 50.dp) //MODIFICATO SE SI ROMPE SUL TELEFONO TOGLIERE
+                            .size(150.dp, 50.dp)
                             .wrapContentWidth()
                             .border(
                                 width = 2.dp,
@@ -112,7 +114,7 @@ fun HomeScreen(
                         onClick = onStorico,
                         colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                         modifier = Modifier
-                            .size(150.dp, 50.dp)  // TODO:q SE SI ROMPE SUL TELEFONO TOGLIERE
+                            .size(150.dp, 50.dp)
                             .wrapContentWidth()
                             .border(
                                 width = 2.dp,
@@ -140,17 +142,16 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 96.dp)
+                    .padding(top = 80.dp)
                     .padding(innerPadding)
             ) {
                 TypewriterText(
                     text = "QBRSudoku",
                 )
-               // Spacer(modifier = Modifier.height(64.dp))
                 Image(
                     painter = painterResource(id = if(isDarkTheme) R.drawable.sudokuimage_dark else R.drawable.sudokuimage),
                     contentDescription = "Logo",
-                    modifier = Modifier.weight(1f, fill = true).padding(horizontal = 16.dp, vertical = 16.dp)
+                    modifier = Modifier.weight(1f, fill = true).padding(horizontal = 16.dp, vertical = 40.dp)
                 )
             }
         }
@@ -158,6 +159,7 @@ fun HomeScreen(
 }
 
 
+// Funzione per l'effetto di scrittura
 @Composable
 fun TypewriterText(
     text: String,

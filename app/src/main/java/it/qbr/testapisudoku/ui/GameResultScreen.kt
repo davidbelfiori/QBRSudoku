@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -79,12 +80,12 @@ fun GameResultScreen(
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(stringResource(R.string.Tempo), style = MaterialTheme.typography.bodyMedium, color = if ( isDarkTheme) Color.White else Color.Black)
-                Text(timeText, style = MaterialTheme.typography.bodyLarge)
+                Text(timeText, style = MaterialTheme.typography.bodyLarge, color = if ( isDarkTheme) Color.White else Color.Black)
             }
             Spacer(Modifier.height(12.dp))
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(stringResource(R.string.Errori), style = MaterialTheme.typography.bodyMedium, color = if ( isDarkTheme) Color.White else Color.Black)
-                Text("$errorCount", style = MaterialTheme.typography.bodyLarge)
+                Text("$errorCount", style = MaterialTheme.typography.bodyLarge, color = if ( isDarkTheme) Color.White else Color.Black)
             }
         }
         Spacer(Modifier.height(24.dp))
@@ -109,36 +110,39 @@ fun GameResultScreen(
             )
         }
         Spacer(Modifier.height(24.dp))
+
         if (!isWin && !showSolution) {
 
-
-
+            // Tasto Mostra Soluzione
             Button(
                 onClick = { showSolution = true },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                contentPadding = PaddingValues(0.dp),
                 modifier = Modifier
+                    .size(270.dp, 50.dp)
                     .wrapContentWidth()
                     .border(
                         width = 2.dp,
                         color = blue_secondary,
                         shape = RoundedCornerShape(50.dp)
-                    )
-                    .size( 160.dp, 50.dp),
+                    ),
             ) {
-                Text(stringResource(R.string.mostra_sol), fontSize = 15.sp, color = blue_secondary)
+                Text(stringResource(R.string.mostra_sol), fontSize = 15.sp, color = blue_secondary, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
             }
 
             Spacer(Modifier.height(8.dp))
         }
+
+        // Tasto Home
         Button(
             onClick = onHomeClick,
             modifier = Modifier
                 .padding(8.dp)
-                .size(150.dp, 50.dp),
+                .size(120.dp, 50.dp),
             colors = ButtonDefaults.buttonColors(containerColor = blue_secondary),
             shape = RoundedCornerShape(50.dp),
         ) {
-            Text("Home", fontSize = 22.sp)
+            Text("Home", fontSize = 20.sp)
         }
     }
 }

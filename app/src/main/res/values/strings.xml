@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SudokuQBR</string>
+    <string name="app_name">QBRSudoku</string>
     <string name="StartGame">Gioca</string>
     <string name="Stat">Statistiche</string>
     <string name="History">Storico</string>

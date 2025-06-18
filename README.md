@@ -1,67 +1,58 @@
 # QBRSudoku
 
-Un'app Android in Kotlin che mostra una griglia di Sudoku caricata dinamicamente da una API esterna, consentendo all'utente di giocare, visualizzare una preview in tempo reale della griglia e verificare la soluzione.
+QBRSudoku è un'applicazione Android per giocare a Sudoku, sviluppata in Kotlin con un'interfaccia moderna e funzionalità avanzate di tracciamento delle partite e statistiche.
 
 ## Funzionalità principali
 
-- **Caricamento dinamico**: la tabella Sudoku viene caricata da [sudoku-api.vercel.app](https://sudoku-api.vercel.app/api/dosuku).
-- **Celle non modificabili**: i numeri forniti dall'API come iniziali non sono modificabili dall'utente.
-- **Interazione semplice**: puoi inserire numeri tramite pulsanti o UI custom.
-- **Preview in tempo reale**: sotto la griglia viene visualizzata una preview testuale aggiornata ad ogni modifica.
-- **Verifica soluzione**: un pulsante permette di confrontare la soluzione inserita con quella dell’API.
-- **Storico delle partite**: tutte le partite giocate vengono salvate in un database locale. Puoi vedere le partite passate, lo stato (completata o meno), la data e la soluzione.
-- **Database locale**: utilizzo di Room/SQLite per la gestione dello storico delle partite.
+- *Interfaccia semplice e intuitiva* per giocare a Sudoku.
+- *Tracciamento degli errori* e del tempo di gioco.
+- *Statistiche dettagliate* sulle partite svolte, tempi migliori e percentuale di vittorie.
+- *Storico partite* con possibilità di filtrare e ordinare i risultati.
+- *Suggerimenti, selezione e cancellazione rapida* per aiutare il giocatore durante la partita.
+
 
 ## Screenshot
 
-<img src="https://github.com/user-attachments/assets/317ea88e-b19d-45c7-b5e0-21a00d91f56e" width="250"/>
-<img src="https://github.com/user-attachments/assets/5ca44bc2-b6a2-4138-b09d-18ebd28039d6" width="250"/>
-<img src="https://github.com/user-attachments/assets/308bf064-2a82-4118-840c-b530ef8a6253" width="250"/>
+| Light Mode | Dark Mode |
+|:----------:|:---------:|
+| <img src="https://github.com/user-attachments/assets/86784e54-d480-4ad8-b3c1-694af7d45523" width="180"/> | <img src="https://github.com/user-attachments/assets/c9f52d42-71c3-491f-911a-01214ccc55fa" width="180"/> |
+| <img src="https://github.com/user-attachments/assets/1d01c433-64b1-4209-a728-5153479ff6e5" width="180"/> | <img src="https://github.com/user-attachments/assets/072a7a01-8903-4e20-aaf5-a0a42207368a" width="180"/> |
+| <img src="https://github.com/user-attachments/assets/ea14012e-7eff-456e-bf23-82473dc33dfd" width="180"/> | <img src="https://github.com/user-attachments/assets/023bfcc5-f959-44e8-9116-924b5ee0972a" width="180"/> |
+| <img src="https://github.com/user-attachments/assets/0126eadf-3bad-45f3-bd6e-ca5747ece6f5" width="180"/> | <img src="https://github.com/user-attachments/assets/c4fcf68c-0af9-4d65-9a2f-d2fd7dde4259" width="180"/> |
+| <img src="https://github.com/user-attachments/assets/d4a12b31-cd5d-482a-a851-585d237d28b0" width="180"/> | <img src="https://github.com/user-attachments/assets/2d965eb3-b905-4d74-9cb1-26d67b4777d7" width="180"/> |
 
 
 
 ## Come funziona
 
-1. **All'avvio** viene fatta una chiamata HTTP all'API e la board viene visualizzata.
-2. **I numeri diversi da 0** sono mostrati e non modificabili.
-3. **Le celle vuote (0)** sono editabili dall’utente.
-4. **La preview** mostra in tempo reale lo stato della board.
-5. **Premi "Verifica"** per sapere se hai risolto correttamente il Sudoku.
-6. **Ogni partita** (con soluzione, stato, data) viene salvata su database nello storico.
-7. **Puoi accedere allo storico** delle partite giocate e vedere i dettagli di ciascuna.
-## Struttura del progetto
+- Avvia l'app e scegli "Gioca" per iniziare una nuova partita di Sudoku.
+- Inserisci i numeri toccando le caselle, usa i tasti di selezione rapida, cancella e suggerimenti se necessario.
+- Gli errori e il tempo vengono tracciati automaticamente.
+- Consulta la sezione "Statistiche" per vedere i tuoi record e i progressi.
+- Nella sezione "Storico" puoi rivedere tutte le partite, filtrare per vinte/perse e ordinare per data o tempo.
 
-- `MainActivity.kt`: Gestisce il ciclo di vita dell’app e le principali interazioni utente.
-- `BoardView.kt`: Custom View per la visualizzazione e gestione della griglia Sudoku.
-- `SudokuApi.kt`: Gestisce le chiamate REST verso l’API Sudoku.
-- `GameHistoryActivity.kt`: Activity per la visualizzazione dello storico delle partite.
-- `GameHistoryAdapter.kt`: Adapter per mostrare la lista delle partite giocate.
-- `GameEntity.kt`, `GameDao.kt`, `GameDatabase.kt`: Strati dati del database (Room) per la gestione delle partite giocate.
+## Installazione e sviluppo
+
+1. *Clona il repository*
+   sh
+   git clone https://github.com/nich-bi/QBRSudoku.git
+   
+2. *Apri il progetto in Android Studio*
+3. *Compila ed esegui* su un emulatore o dispositivo Android.
+
+> *Requisiti*
+> - Android Studio
+> - Android SDK 23+
+> - Kotlin
+
+## Crediti
+
+Sviluppato da:
+[Nicolò Bianchi](https://github.com/nich-bi)
+[David Belfiori](https://github.com/davidbelfiori)
+[Matteo Volpe](https://github.com/Fox070204)
 
 
-## Come eseguire
+---
 
-1. Clona il repository:
-    ```sh
-    git clone https://github.com/davidbelfiori/testAPISUdoku.git
-    ```
-2. Apri il progetto in **Android Studio**.
-3. Sincronizza le dipendenze (Gradle).
-4. Esegui su un emulatore o dispositivo reale.
-
-## Database & Storico
-
-- Lo storico delle partite viene gestito tramite Room (ORM per SQLite).
-- Ogni partita salvata contiene: data, stato, schema iniziale, schema soluzione, schema utente finale.
-- Puoi visualizzare lo storico tramite una activity dedicata.
-
-## API di riferimento
-
-- [https://sudoku-api.vercel.app/api/dosuku](https://sudoku-api.vercel.app/api/dosuku)
-
-## Autore
-
-- [David Julian Belfiori](https://github.com/davidbelfiori)
-- [Nicolò Bianchi](https://github.com/nich-bi)
-- [Matteo Volpe](https://github.com/Fox070204)
-
+QBRSudoku è pensato per tutti gli amanti dei puzzle e della logica. Buon divertimento!

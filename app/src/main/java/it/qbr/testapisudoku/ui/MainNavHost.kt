@@ -1,5 +1,10 @@
 package it.qbr.testapisudoku.ui
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,21 +27,48 @@ fun MainNavHost(
     onToggleDarkTheme: () -> Unit
 ) {
 
-    NavHost(navController, startDestination = "home") {
+    NavHost(
+        navController = navController,
+        startDestination = "home",
+        enterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { fullWidth -> fullWidth },
+                animationSpec = tween(300)
+            ) + fadeIn(animationSpec = tween(300))
+        },
+        exitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { fullWidth -> -fullWidth },
+                animationSpec = tween(300)
+            ) + fadeOut(animationSpec = tween(300))
+        },
+        popEnterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { fullWidth -> -fullWidth },
+                animationSpec = tween(300)
+            ) + fadeIn(animationSpec = tween(300))
+        },
+        popExitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { fullWidth -> fullWidth },
+                animationSpec = tween(300)
+            ) + fadeOut(animationSpec = tween(300))
+        }
+    ) {
         composable("home") {
             HomeScreen(
                 onStartGame = { navController.navigate("sudoku") },
                 onStorico = { navController.navigate("storico") },
-                onStats = { navController.navigate("stats") } ,
+                onStats = { navController.navigate("stats") },
                 isDarkTheme = isDarkTheme,
                 onToggleDarkTheme = onToggleDarkTheme
             )
         }
         composable("sudoku") {
-            SudokuScreen(navController , isDarkTheme = isDarkTheme)
+            SudokuScreen(navController, isDarkTheme = isDarkTheme)
         }
         composable("storico") {
-            StoricoPartiteScreen(navController,isDarkTheme = isDarkTheme)
+            StoricoPartiteScreen(navController, isDarkTheme = isDarkTheme)
         }
         composable("stats") {
             val context = LocalContext.current

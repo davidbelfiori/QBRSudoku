@@ -258,9 +258,11 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
+                    /*
                     val iconBarHeight = 64.dp
                     val keypadHeight = 110.dp
                     val verticalPadding = 32.dp // somma di eventuali padding verticali extra
+                     */
 
                     // All'interno di SudokuScreen, nella parte dove c'è la Board:
                     val configuration = LocalConfiguration.current

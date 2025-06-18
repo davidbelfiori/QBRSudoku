@@ -1,4 +1,5 @@
 [versions]
+accompanistNavigationAnimation = "<ultima-versione>"
 activityComposeVersion = "1.10.1"
 agp = "8.9.3"
 constraintlayoutCompose = "1.1.1"
@@ -22,6 +23,7 @@ uiUnit = "1.8.2"
 
 [libraries]
 #noinspection SimilarGradleDependency
+accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 androidx-activity-compose-v172 = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-constraintlayout-compose-v101 = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutComposeVersion" }

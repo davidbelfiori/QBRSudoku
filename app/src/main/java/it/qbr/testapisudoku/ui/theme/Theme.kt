@@ -36,31 +36,34 @@ private val LightColorScheme = lightColorScheme(
     onError = Color.Red,
 )
 
-//val AppColorScheme = lightColorScheme(
-//    primary = blue_p,
-//    onPrimary = Color.White,
-//    secondary = blue_secondary,
-//    onSecondary = Color.White,
-//    background = Color.White,
-//    onBackground = Color.Black,
-//    surface = background_rows,
-//    onSurface = gray,
-//    error = quit_background,
-//    onError = Color.Red,
-//)
-//
-//
-//
-//@Composable
-//fun QBRSudokuTheme(
-//    content: @Composable () -> Unit
-//) {
-//    MaterialTheme(
-//        colorScheme = AppColorScheme,
-//        typography = AppTypography,
-//        content = content
-//    )
-//}
+
+/*
+val AppColorScheme = lightColorScheme(
+    primary = blue_p,
+    onPrimary = Color.White,
+    secondary = blue_secondary,
+    onSecondary = Color.White,
+    background = Color.White,
+    onBackground = Color.Black,
+    surface = background_rows,
+    onSurface = gray,
+    error = quit_background,
+    onError = Color.Red,
+)
+
+
+@Composable
+fun QBRSudokuTheme(
+    content: @Composable () -> Unit
+) {
+    MaterialTheme(
+        colorScheme = AppColorScheme,
+        typography = AppTypography,
+        content = content
+    )
+}
+ */
+
 
 
 @Composable
