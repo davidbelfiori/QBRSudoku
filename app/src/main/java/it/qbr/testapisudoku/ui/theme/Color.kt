@@ -20,4 +20,3 @@ val blue_number = Color(0xff335aaf)
 
 
 
-

@@ -58,17 +58,19 @@ fun HomeScreen(
             contentWindowInsets = WindowInsets(0),
 
             topBar = {
-
                 // Icona modalità scura/chiara
                 IconButton(
                     onClick = onToggleDarkTheme,
-                    modifier = Modifier.size(50.dp).statusBarsPadding()
+                    modifier = Modifier
+                        //.size(80.dp)
+                        .statusBarsPadding()
                 ) {
                     Icon(
                         painter = painterResource(
                             id = if (isDarkTheme) R.drawable.sunny else R.drawable.ic_darkmode
                         ),
                         contentDescription = "Cambio modalita' scura",
+                        tint = if (isDarkTheme) Color.White else Color.Black
                     )
                 }
             },
@@ -128,6 +130,7 @@ fun HomeScreen(
                             color = blue_secondary
                         )
                     }
+
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "by QBR",
@@ -148,6 +151,7 @@ fun HomeScreen(
                 TypewriterText(
                     text = "QBRSudoku",
                 )
+                Spacer(modifier = Modifier.height(16.dp))
                 Image(
                     painter = painterResource(id = if(isDarkTheme) R.drawable.sudokuimage_dark else R.drawable.sudokuimage),
                     contentDescription = "Logo",
