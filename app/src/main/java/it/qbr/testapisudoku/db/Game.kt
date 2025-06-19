@@ -3,6 +3,7 @@ package it.qbr.testapisudoku.db
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+// This data class represents a game entity in the database.
 @Entity(tableName = "Game")
 data class Game(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,

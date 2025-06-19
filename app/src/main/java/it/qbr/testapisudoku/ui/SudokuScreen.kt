@@ -115,6 +115,7 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
     var completedCells by remember { mutableStateOf<Set<Pair<Int, Int>>>(emptySet()) }
     val scope = rememberCoroutineScope()
 
+    //Check the completeness of the Sudoku board and animate completed sections like rows, columns, and blocks
     fun checkCompleteness(cells: List<List<Int>>) {
         if (cells.isEmpty() || cells.size != 9 || cells[0].size != 9) {
             return
@@ -208,7 +209,7 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
         checkCompleteness(cells)
     }
 
-
+    // Inzialize the hints left based on the selected difficulty
     if (step == 0) {
         Scaffold (containerColor = if (isDarkTheme) Color(34, 40, 49) else Color(0xFFE7EBF0)){
         Column(
@@ -277,7 +278,7 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
                 }
             }
         }
-
+        // Check for win condition
         fun checkWin(): Boolean {
             if (errorCount > maxErrors) return false
             if (cells.size != 9 || solution.size != 9) return false
@@ -309,7 +310,7 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
                 }
             }
         }
-
+        //Update cell value and check for errors or win condition
         fun updateCell(row: Int, col: Int, value: Int) {
             if (noteMode) {
                 val key = row to col
@@ -373,19 +374,13 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
-                    /*
-                    val iconBarHeight = 64.dp
-                    val keypadHeight = 110.dp
-                    val verticalPadding = 32.dp // somma di eventuali padding verticali extra
-                     */
-
+                    // ---- BOARD AND CONTROLS ----
                     // All'interno di SudokuScreen, nella parte dove c'è la Board:
                     val configuration = LocalConfiguration.current
                     val screenWidth = configuration.screenWidthDp.dp
                     val screenHeight = configuration.screenHeightDp.dp
 
-// Imposta una dimensione massima ragionevole (es: 400.dp) e margini
+                    // Imposta una dimensione massima ragionevole (es: 400.dp) e margini
                     val maxBoardSize = 400.dp
                     val boardSize = remember(screenWidth, screenHeight) {
                         // Usa il minore tra 90% della larghezza, 60% dell'altezza e maxBoardSize
