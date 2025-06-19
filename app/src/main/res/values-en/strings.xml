@@ -5,7 +5,7 @@
     <string name="Stat">Statistics</string>
     <string name="History">History</string>
     <string name="Tempo">Time</string>
-    <string name="Errori">Error</string>
+    <string name="Errori">Errors</string>
     <string name="StoricoFiltraTutte">All</string>
     <string name="StoricoFiltraVinte">Win</string>
     <string name="StoricoFiltraPerse">Lose</string>
@@ -40,4 +40,9 @@
     <string name="sugg_term">Hints ended</string>
     <string name="mess_sugg_term">You have exhausted the available hints.</string>
     <string name="mostra_sol">Show solution</string>
+    <string name="seleziona">Select</string>
+    <string name="canc">Del</string>
+    <string name="sugg">Hints</string>
+    <string name="aiuto">Help</string>
+    <string name="mess_no_part">No match found</string>
 </resources>

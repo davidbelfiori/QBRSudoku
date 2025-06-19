@@ -56,6 +56,7 @@ fun HomeScreen(
         // Main content of the HomeScreen
         Scaffold(
             contentWindowInsets = WindowInsets(0),
+
             topBar = {
 
                 // Icona modalità scura/chiara
@@ -68,7 +69,6 @@ fun HomeScreen(
                             id = if (isDarkTheme) R.drawable.sunny else R.drawable.ic_darkmode
                         ),
                         contentDescription = "Cambio modalita' scura",
-                        //modifier = Modifier.size(40.dp)
                     )
                 }
             },
@@ -151,7 +151,7 @@ fun HomeScreen(
                 Image(
                     painter = painterResource(id = if(isDarkTheme) R.drawable.sudokuimage_dark else R.drawable.sudokuimage),
                     contentDescription = "Logo",
-                    modifier = Modifier.weight(1f, fill = true).padding(horizontal = 16.dp, vertical = 40.dp)
+                    modifier = Modifier.weight(1f, fill = true).padding(horizontal = 16.dp)
                 )
             }
         }

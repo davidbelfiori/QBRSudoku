@@ -101,7 +101,7 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
     var resultIsWin by remember { mutableStateOf(false) } // true se ha vinto, false se ha perso
     var finalTime by remember { mutableIntStateOf(0) } // secondi al momento dell'abbandono della partita
 
-    var isPaused by remember { mutableStateOf(false) }
+    var isPaused by remember { mutableStateOf(false) }  // partita in pausa
 
     // Blur graduale
     val blurDp by animateDpAsState(
@@ -109,13 +109,16 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
         label = "BlurAnimation"
     )
 
+    // Variabili per animazione riga, colonna, box completato
     var completedRows by remember { mutableStateOf(setOf<Int>()) }
     var completedColumns by remember { mutableStateOf(setOf<Int>()) }
     var completedBlocks by remember { mutableStateOf(setOf<Int>()) }
     var completedCells by remember { mutableStateOf<Set<Pair<Int, Int>>>(emptySet()) }
     val scope = rememberCoroutineScope()
 
+
     fun checkCompleteness(cells: List<List<Int>>) {
+
         if (cells.isEmpty() || cells.size != 9 || cells[0].size != 9) {
             return
         }
@@ -203,60 +206,60 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
         completedCells = emptySet()
     }
 
-    // Aggiungi un LaunchedEffect per controllare il completamento quando cells cambia
+    // Controlla il completamento quando cells cambia
     LaunchedEffect(cells) {
         checkCompleteness(cells)
     }
 
 
-    if (step == 0) {
+    if (step == 0) {  // Scegli difficolta'
         Scaffold (containerColor = if (isDarkTheme) Color(34, 40, 49) else Color(0xFFE7EBF0)){
-        Column(
-            Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            Column(
+                Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
 
-        ) {
-            IconButton(
-                onClick = { navController.popBackStack() }
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.back_svgrepo_com),
-                    tint = if (isDarkTheme) Color.White else Color.Black ,
-                    contentDescription = "Torna alla Home",
-                    modifier = Modifier.size(30.dp)
-                )
-            }
-            Text(text = stringResource(R.string.scelta_difficolta), fontSize = 22.sp)
-            Spacer(Modifier.height(24.dp))
-            Difficulty.entries.forEach { diff ->
-                Button(
-                    onClick = {
-                        selectedDifficulty = diff
-                        maxErrors = diff.maxErrors
-                        errorCount = 0
-                        step = 1
-                    },
-                    Modifier.padding(8.dp).size(150.dp, 50.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = blue_secondary),
-                    shape = RoundedCornerShape(50.dp),
+                IconButton(
+                    onClick = { navController.popBackStack() }
                 ) {
-                    Text(
-                        text =
-                            when (Difficulty.entries.indexOf(diff)) {
-                                0 -> stringResource(R.string.diff_facile)
-                                1 -> stringResource(R.string.diff_media)
-                                2 -> stringResource(R.string.diff_difficile)
-                                3 -> stringResource(R.string.diff_impossibile)
-                                else -> "Unknown"
-                            },
-                        color = Color.White
+                    Icon(
+                        painter = painterResource(id = R.drawable.back_svgrepo_com),
+                        tint = if (isDarkTheme) Color.White else Color.Black ,
+                        contentDescription = "Torna alla Home",
+                        modifier = Modifier.size(30.dp)
                     )
                 }
-            }
+                Text(text = stringResource(R.string.scelta_difficolta), fontSize = 22.sp)
+                Spacer(Modifier.height(24.dp))
+                Difficulty.entries.forEach { diff ->
+                    Button(
+                        onClick = {
+                            selectedDifficulty = diff
+                            maxErrors = diff.maxErrors
+                            errorCount = 0
+                            step = 1
+                        },
+                        Modifier.padding(8.dp).size(150.dp, 50.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = blue_secondary),
+                        shape = RoundedCornerShape(50.dp),
+                    ) {
+                        Text(
+                            text =
+                                when (Difficulty.entries.indexOf(diff)) {
+                                    0 -> stringResource(R.string.diff_facile)
+                                    1 -> stringResource(R.string.diff_media)
+                                    2 -> stringResource(R.string.diff_difficile)
+                                    3 -> stringResource(R.string.diff_impossibile)
+                                    else -> "Unknown"
+                                },
+                            color = Color.White
+                        )
+                    }
+                }
 
+            }
         }
-    }
     } else {
         LaunchedEffect(Unit) {
             val (initialBoard, solutionBoard) = withContext(Dispatchers.IO) {
@@ -304,7 +307,7 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
                 if (count == 9 && !completedNumbers.contains(number)) {
                     completedNumbers.add(number)
                 } else if (count < 9 && completedNumbers.contains(number)) {
-                    // If number was previously completed but is no longer complete (e.g. after erasing)
+                    // If number was previously completed but is no longer complete
                     completedNumbers.remove(number)
                 }
             }

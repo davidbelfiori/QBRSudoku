@@ -48,6 +48,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -131,7 +132,7 @@ fun SudokuTopBar(
                     }
                 }
                 Text(
-                    text = "Errori",
+                    text = stringResource(R.string.Errori),
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Black,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
@@ -165,7 +166,7 @@ fun SudokuTopBar(
                     }
                 }
                 Text(
-                    text = "Tempo",
+                    text = stringResource(R.string.Tempo),
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = FontFamily(Font(R.font.poppins_regular)),
@@ -556,7 +557,7 @@ fun SudokuIconBar(
                     modifier = Modifier.size(40.dp)
                 )
                 Text(
-                    text = "Selez.",
+                    text = stringResource(R.string.seleziona),
                     fontSize = 12.sp,
                     color = if (isDarkTheme) Color.White else Color.Black,
                     modifier = Modifier.padding(top = 55.dp),
@@ -590,7 +591,7 @@ fun SudokuIconBar(
                     modifier = Modifier.size(40.dp)
                 )
                 Text(
-                    text = "Canc.",
+                    text = stringResource(R.string.canc),
                     fontSize = 12.sp,
                     color = if (isDarkTheme) Color.White else Color.Black,
                     modifier = Modifier.padding(top = 55.dp),
@@ -634,7 +635,7 @@ fun SudokuIconBar(
                     tint = iconTint
                 )
                 Text(
-                    text = "Sugg.",
+                    text = stringResource(R.string.sugg),
                     fontSize = 12.sp,
                     color = if (isDarkTheme) Color.White else Color.Black,
                     modifier = Modifier.padding(top = 55.dp),
@@ -669,7 +670,7 @@ fun SudokuIconBar(
                     modifier = Modifier.size(40.dp)
                 )
                 Text(
-                    text = "Aiuto",
+                    text = stringResource(R.string.aiuto),
                     fontSize = 12.sp,
                     color =  if (isDarkTheme) Color.White else Color.Black,
                     modifier = Modifier.padding(top = 55.dp),

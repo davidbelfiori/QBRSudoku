@@ -186,7 +186,7 @@ fun StoricoPartiteScreen(navController: NavHostController, isDarkTheme: Boolean)
                         .fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Nessuna partita trovata", style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.mess_no_part), style = MaterialTheme.typography.titleMedium)
                 }
             } else {
                 LazyColumn(

@@ -39,4 +39,9 @@
     <string name="sugg_term">Suggerimenti terminati</string>
     <string name="mess_sugg_term">Hai esaurito i suggerimenti disponibili.</string>
     <string name="mostra_sol">Mostra soluzione</string>
+    <string name="seleziona">Selez.</string>
+    <string name="canc">Canc.</string>
+    <string name="sugg">Sugg.</string>
+    <string name="aiuto">Aiuto</string>
+    <string name="mess_no_part">Nessuna partita trovata</string>
 </resources>
