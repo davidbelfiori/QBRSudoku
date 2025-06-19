@@ -287,6 +287,29 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
             return true
         }
 
+        // Funzione per aggiornare i numeri completati
+        fun updateCompletedNumbers() {
+            // Check each number from 1 to 9
+            for (number in 1..9) {
+                // Count how many times this number appears in the grid
+                var count = 0
+                for (row in 0..8) {
+                    for (col in 0..8) {
+                        if (cells[row][col] == number) {
+                            count++
+                        }
+                    }
+                }
+                // If this number appears 9 times (all instances used) and isn't already in completedNumbers
+                if (count == 9 && !completedNumbers.contains(number)) {
+                    completedNumbers.add(number)
+                } else if (count < 9 && completedNumbers.contains(number)) {
+                    // If number was previously completed but is no longer complete (e.g. after erasing)
+                    completedNumbers.remove(number)
+                }
+            }
+        }
+
         fun updateCell(row: Int, col: Int, value: Int) {
             if (noteMode) {
                 val key = row to col
@@ -310,6 +333,7 @@ fun SudokuScreen(navController: NavHostController, isDarkTheme: Boolean) {
                         }.toMutableList() else rowList
                     }
                     if (checkWin()) showWinDialog = true
+                    updateCompletedNumbers()
                 }
             }
         }
