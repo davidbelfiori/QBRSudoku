@@ -65,7 +65,7 @@ import it.qbr.testapisudoku.ui.theme.gray_2
 import it.qbr.testapisudoku.ui.theme.light_gray
 import it.qbr.testapisudoku.ui.theme.quit_background
 
-
+// Composable function to display the Sudoku top bar with timer, error count, and controls
 @Composable
 fun SudokuTopBar(
     maxErr: Int,
@@ -205,7 +205,7 @@ fun SudokuTopBar(
     }
 }
 
-
+// Composable function to animate the digits in the Sudoku top bar
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedDigit(digit: Char, key: String, isDarkTheme: Boolean) {
@@ -227,7 +227,7 @@ fun AnimatedDigit(digit: Char, key: String, isDarkTheme: Boolean) {
 }
 
 
-
+//SudokuBoard composable function to display the Sudoku grid
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun SudokuBoard(
@@ -300,7 +300,7 @@ fun SudokuBoard(
 }
 
 
-
+// SudokuCell composable function to display a single cell in the Sudoku grid
 @Composable
 fun SudokuCell(
     value: Int,
@@ -420,7 +420,7 @@ fun SudokuCell(
 
 
 
-
+// SudokuKeypad composable function to display the keypad for number selection
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun SudokuKeypad(
@@ -516,6 +516,7 @@ fun SudokuKeypad(
     }
 }
 
+// SudokuIconBar composable function to display the icon bar with note mode, erase, suggest, and help buttons
 @Composable
 fun SudokuIconBar(
     noteMode: Boolean,

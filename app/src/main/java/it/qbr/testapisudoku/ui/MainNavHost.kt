@@ -20,6 +20,15 @@ import it.qbr.testapisudoku.db.AppDatabase
 import it.qbr.testapisudoku.db.Game
 import kotlinx.coroutines.launch
 
+
+/**
+ * Main navigation host for the application.
+ *
+ * @param navController The navigation controller used to manage navigation between screens.
+ * @param isDarkTheme A boolean indicating whether the app is in dark theme mode.
+ * @param onToggleDarkTheme A callback function to toggle the dark theme mode.
+ */
+
 @Composable
 fun MainNavHost(
     navController: NavHostController,
